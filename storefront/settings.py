@@ -64,6 +64,13 @@ INSTALLED_APPS = [
     'conversation',
     'debug_toolbar',
 ]
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dttmf74ie',
+    'API_KEY': '252195551666353',
+    'API_SECRET': 'w3pRn3TvAkUvpUeG57w-NsnEafE',
+}
+
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
@@ -98,8 +105,25 @@ INTERNAL_IPS = [
 
 
 ROOT_URLCONF = 'storefront.urls'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+if ENVIRONMENT == 'production':
+    # Use Cloudinary or other cloud media storage
+    INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
+
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+    }
+
+else:
+    # Use local media files (for local development)
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+
+
 
 
 TEMPLATES = [
