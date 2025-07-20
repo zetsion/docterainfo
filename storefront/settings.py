@@ -80,6 +80,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
 # SOCIAL_AUTH_PIPELINE = [...]
 
 MIDDLEWARE = [
+     'whitenoise.middleware.WhiteNoiseMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
