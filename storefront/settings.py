@@ -10,10 +10,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import sys
 from pathlib import Path
+from dotenv import load_dotenv
+import dj_database_url
 import os
+# from dotenv import load_dotenv
 
 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Detect environment
+ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,10 +32,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8)inru19trbjguch-vfq+ma1lj5x2r@d1)84i%f(4b@o41wfcs'
+# SECRET_KEY = 'django-insecure-8)inru19trbjguch-vfq+ma1lj5x2r@d1)84i%f(4b@o41wfcs'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'unsafe-default-secret-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = ENVIRONMENT == 'development'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'docterainfo.onrender.com']
 #tesfa-- the below lines were added to stop defualt redirect to accounts/profile when loged in-- 
@@ -111,16 +122,49 @@ WSGI_APPLICATION = 'storefront.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+
+
+
+
+# Database setup
+if ENVIRONMENT == 'production':
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.getenv('DATABASE_URL'),
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+else:
+    # Local dev database (fallback if DATABASE_URL not set)
+    DATABASES = {
+        'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': '654321',
         'HOST': 'localhost',
         'PORT': '5432',  # Default PostgreSQL port
+        }
     }
-}
+
+# DATABASES = {
+#     'default': dj_database_url.parse(
+#         os.environ.get("DATABASE_URL", "postgres://postgres:654321@localhost:5432/postgres")
+#     )
+# }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': '654321',
+#         'HOST': 'localhost',
+#         'PORT': '5432',  # Default PostgreSQL port
+#     }
+# }
 
 
 # Password validation
