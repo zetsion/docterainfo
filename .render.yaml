@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: docdoc-app   # You can change this name
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn storefront.wsgi
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: storefront.settings
+      - key: SECRET_KEY
+        generateValue: true

@@ -1,0 +1,93 @@
+{% extends "core/base.html" %}
+{% block title %}Dashboard | MyStore{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10">
+    <h2 class="text-3xl font-bold text-center text-indigo-700 mb-8">Dashboard</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Total Items -->
+        <div class="bg-white shadow rounded-lg p-6 text-center">
+            <h3 class="text-lg font-semibold text-gray-700">Total Items</h3>
+            <p class="text-2xl font-bold text-indigo-600 mt-2">{{ total_items }}</p>
+        </div>
+
+        <!-- Online Items -->
+        <div class="bg-white shadow rounded-lg p-6 text-center">
+            <h3 class="text-lg font-semibold text-gray-700">Available Online</h3>
+            <p class="text-2xl font-bold text-green-600 mt-2">{{ online_items }}</p>
+        </div>
+
+        <!-- In-Store Only Items -->
+        <div class="bg-white shadow rounded-lg p-6 text-center">
+            <h3 class="text-lg font-semibold text-gray-700">In-Store Only</h3>
+            <p class="text-2xl font-bold text-red-600 mt-2">{{ offline_items }}</p>
+        </div>
+    </div>
+
+       <!-- My Items List -->
+    <div class="mt-8">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">My Items</h3>
+
+        {% if myItems %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for item in myItems %}
+                    <div class="bg-white shadow rounded-lg p-4">
+                        <h4 class="text-lg font-semibold">{{ item.name }}</h4>
+                        <p class="text-gray-600">{{ item.description|truncatechars:80 }}</p>
+                        <p class="mt-2 text-indigo-600 font-semibold">${{ item.price }}</p>
+
+                        <a href="{% url 'item:detail' item.id %}" class="inline-block mt-3 text-sm bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                            View Details
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500">You haven't added any items yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Recent Items Table -->
+    <div class="mt-10">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Recent Items</h3>
+
+        {% if recent_items %}
+            <div class="overflow-x-auto bg-white shadow rounded-lg">
+                <table class="min-w-full text-left border-collapse">
+                    <thead class="bg-indigo-600 text-white">
+                        <tr>
+                            <th class="p-4">Name</th>
+                            <th class="p-4">Category</th>
+                            <th class="p-4">Price</th>
+                            <th class="p-4">Available Online</th>
+                            <th class="p-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in recent_items %}
+                        <tr class="border-t">
+                            <td class="p-4">{{ item.name }}</td>
+                            <td class="p-4">{{ item.category }}</td>
+                            <td class="p-4">${{ item.price }}</td>
+                            <td class="p-4">
+                                {% if item.available_online %}
+                                    <span class="text-green-600 font-semibold">Yes</span>
+                                {% else %}
+                                    <span class="text-red-500">No</span>
+                                {% endif %}
+                            </td>
+                            <td class="p-4">
+                                <a href="{% url 'item:detail' item.id %}" class="text-indigo-600 hover:underline">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-gray-500">No recent items added.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

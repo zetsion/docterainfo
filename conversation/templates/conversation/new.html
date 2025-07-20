@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+
+{% block title %}Start New Conversation{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-indigo-700 mb-6 text-center">Start a New Conversation</h2>
+
+<form method="post" action=".">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+        <div>
+            <label for="{{ field.id_for_label }}" class="block mb-1 font-medium text-gray-700">
+                {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.help_text %}
+                <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+            {% endif %}
+            {% if field.errors %}
+                <p class="text-red-500 text-sm">{{ field.errors|striptags }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+ <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+Send Message
+</button>
+
+</form>
+</div>
+{% endblock %}

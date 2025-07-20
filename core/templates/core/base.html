@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Welcome to our e-commerce store - shop top products at great prices.">
+    <meta name="author" content="Your Store Name">
+    <meta name="keywords" content="E-commerce, Online Store, Shop, Products, Tailwind CSS, Django">
+    <title>{% block title %}DocteraInfo - Home{% endblock %}</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+       <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="text-2xl font-bold text-indigo-600">
+                <a href="/">DocteraInfo</a>
+            </div>
+            
+            <!-- Nav Links -->
+<nav id="mobileMenu" class="hidden md:flex gap-6 text-gray-700 text-sm">
+    <a href="{% url 'core:index' %}" class="hover:text-indigo-600">Home</a>
+    {% if request.user.is_authenticated %}
+        {% url 'item:items' as browse_url %}
+    {% else %}
+        {% url 'core:login' as browse_url %}
+    {% endif %}
+    <a href="{{ browse_url }}" class="hover:text-indigo-600">Browse</a>
+    <a href="{% url 'core:about' %}" class="hover:text-indigo-600">About</a>
+
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'item:new' %}" class="hover:text-indigo-600">New Item</a>
+        <a href="{% url 'conversation:inbox' %}" class="hover:text-indigo-600">Inbox</a>
+        <a href="{% url 'dashboard:index' %}" class="hover:text-indigo-600">Dashboard</a>
+        <a href="{% url 'core:logout' %}" class="text-red-600 hover:underline">Logout</a>
+    {% else %}
+        <a href="{% url 'core:login' %}" class="hover:text-indigo-600">Login</a>
+    {% endif %}
+    <a href="{% url 'core:contact' %}" class="hover:text-indigo-600">Contact</a>
+</nav>
+            
+            <!-- Mobile Menu Icon -->
+  <div class="md:hidden">
+    <button onclick="toggleMenu()" class="text-gray-600 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+</div>
+    </header>
+<main class="container mx-auto px-4 mt-10">
+   {% block content %}
+    {% endblock %}
+</main>
+   
+    <footer class="mt-16 text-center text-gray-500 text-sm py-6">
+    &copy; 2025 DocteraInfo. All rights reserved. |
+    <a href="#" class="hover:text-indigo-600">Privacy Policy</a> |
+    <a href="#" class="hover:text-indigo-600">Terms of Service</a> |
+    <a href="#" class="hover:text-indigo-600">Help Center</a>
+</footer>
+ 
+   
+<script>
+function toggleMenu() {
+    const menu = document.getElementById("mobileMenu");
+    if (menu.classList.contains("hidden")) {
+        menu.classList.remove("hidden");
+        menu.classList.add("flex", "flex-col", "gap-4", "mt-4");
+    } else {
+        menu.classList.add("hidden");
+        menu.classList.remove("flex", "flex-col", "gap-4", "mt-4");
+    }
+}
+</script>
+</body>
+</html>

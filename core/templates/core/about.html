@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% block title %}About DocteraInfo{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 text-center bg-white shadow-lg rounded-lg">
+  <h1 class="text-4xl font-bold text-indigo-700 mb-6">About DocteraInfo</h1>
+  <p class="text-gray-700 text-lg mb-6 max-w-3xl mx-auto">
+    DocteraInfo is a healthcare information center built to make affordable medical services more accessible. 
+    Our platform lets users compare prices and find nearby labs, clinics, imaging centers, doctors, medications, and health products.
+  </p>
+  <p class="text-gray-700 text-lg mb-10 max-w-3xl mx-auto">
+    Whether you're a patient looking for cost-effective care or a healthcare provider wanting to reach more people, 
+    DocteraInfo helps you connect through a modern, easy-to-use platform.
+  </p>
+
+  <!-- Buttons -->
+  <div class="flex justify-center space-x-4">
+    <a href="{% url 'core:index' %}" class="bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700 transition">
+      Back to Home
+    </a>
+
+    {% if not user.is_authenticated %}
+    <a href="{% url 'core:login' %}" class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition">
+      Login
+    </a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
